@@ -1,0 +1,29 @@
+app:
+  name: "oss_storage"
+  mode: "dev"
+  port: 9081
+  start_time: "2021-11-09"
+  machine_id: 1
+
+log:
+  level: "debug"
+  filename: "oss_storage.log"
+  max_size: 200
+  max_age: 20
+  max_backup: 7
+
+mysql:
+  host: "192.168.0.104"
+  port: 3306
+  username: "admin"
+  password: "admin"
+  dbname: "oss_storage"
+  max_open_conns: 200
+  max_idle_conns: 50
+
+redis:
+  host: "192.168.0.104"
+  port: 6379
+  password: "password"
+  db: 0
+  pool_size: 5
