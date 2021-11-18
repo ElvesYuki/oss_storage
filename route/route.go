@@ -16,6 +16,9 @@ func SetUp() *gin.Engine {
 	v1 := r.Group("/v1")
 	{
 		v1.GET("/test", api.Test)
+		v1.GET("/test/idGenerate", api.ListIdGenerateHandler)
+		v1.GET("/test/idGenerate/:id", api.GetIdGenerateByIdHandler)
+		v1.GET("/test/get/id", api.GetIdHandler)
 	}
 
 	return r

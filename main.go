@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"oss_storage/pkg/id_generator"
 	"oss_storage/route"
 	"oss_storage/setting"
 	"oss_storage/setting/logger"
@@ -55,7 +56,15 @@ func main() {
 	fmt.Println("5、注册路由")
 	r := route.SetUp()
 
-	// 6、启动服务(优雅关机)
+	// 6、初始化id生成器
+	fmt.Println("6、初始化id生成器")
+	err = id_generator.Init()
+	if err != nil {
+		fmt.Printf("init id_generator failed, err:%v\n", err)
+		return
+	}
+
+	// 启动服务(优雅关机)
 	fmt.Println("6、启动服务(优雅关机)")
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", setting.Conf.AppDetailConfig.Port),
