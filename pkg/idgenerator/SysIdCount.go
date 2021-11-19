@@ -1,4 +1,4 @@
-package id_generator
+package idgenerator
 
 import (
 	"database/sql"

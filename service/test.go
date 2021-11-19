@@ -1,16 +1,16 @@
 package service
 
 import (
-	"oss_storage/pkg/id_generator"
+	"oss_storage/pkg/idgenerator"
 )
 
 func Test() string {
 	return "test"
 }
 
-func ListIdGenerate() (data []*id_generator.SysIdCount, err error) {
+func ListIdGenerate() (data []*idgenerator.SysIdCount, err error) {
 
-	data, err = id_generator.ListSysIdCount()
+	data, err = idgenerator.ListSysIdCount()
 	if err != nil {
 		return nil, err
 	}
@@ -18,9 +18,9 @@ func ListIdGenerate() (data []*id_generator.SysIdCount, err error) {
 	return data, nil
 }
 
-func GetIdGenerateById(id int64) (data *id_generator.SysIdCount, err error) {
+func GetIdGenerateById(id int64) (data *idgenerator.SysIdCount, err error) {
 
-	data, err = id_generator.GetSysIdCountById(id)
+	data, err = idgenerator.GetSysIdCountById(id)
 	if err != nil {
 		return nil, err
 	}
@@ -29,5 +29,5 @@ func GetIdGenerateById(id int64) (data *id_generator.SysIdCount, err error) {
 }
 
 func GetId(module string) (id int64) {
-	return id_generator.GetIdByModule(module)
+	return idgenerator.GetIdByModule(module)
 }

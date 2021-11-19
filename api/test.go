@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"oss_storage/common/httpresult"
 	"oss_storage/service"
 	"strconv"
 )
@@ -48,6 +49,12 @@ func GetIdHandler(c *gin.Context) {
 
 	id := service.GetId(module)
 
-	c.JSON(http.StatusOK, id)
+	httpresult.OK.WithData(id).Build(c)
+
+	//httpresult.OK.ConvToPage(1,5).
+	//	WithBiz(httpresult.Err_Param_Big_Code).
+	//	WithTotal(14).
+	//	WithData(id).
+	//	Build(c)
 
 }

@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"oss_storage/pkg/id_generator"
+	"oss_storage/pkg/idgenerator"
 	"oss_storage/route"
 	"oss_storage/setting"
 	"oss_storage/setting/logger"
@@ -58,9 +58,9 @@ func main() {
 
 	// 6、初始化id生成器
 	fmt.Println("6、初始化id生成器")
-	err = id_generator.Init()
+	err = idgenerator.Init()
 	if err != nil {
-		fmt.Printf("init id_generator failed, err:%v\n", err)
+		fmt.Printf("init idgenerator failed, err:%v\n", err)
 		return
 	}
 
