@@ -28,6 +28,6 @@ func GetIdGenerateById(id int64) (data *idgenerator.SysIdCount, err error) {
 	return data, nil
 }
 
-func GetId(module string) (id int64) {
+func GetId(module string) (id int64, err error) {
 	return idgenerator.GetIdByModule(module)
 }

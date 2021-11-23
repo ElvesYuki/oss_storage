@@ -2,6 +2,7 @@ package httpresult
 
 import (
 	"github.com/gin-gonic/gin"
+	"oss_storage/common/httperror"
 	"time"
 )
 
@@ -29,13 +30,6 @@ func (res *Response) Build(c *gin.Context) {
 	c.JSON(res.Code, res)
 }
 
-// WithBiz 添加错误码
-func (res *Response) WithBiz(biz BizCode) *Response {
-	res.BizCode = biz.BizCode
-	res.Msg = biz.Msg
-	return res
-}
-
 // WithMsg 添加信息
 func (res *Response) WithMsg(msg string) *Response {
 	res.Msg = msg
@@ -45,5 +39,13 @@ func (res *Response) WithMsg(msg string) *Response {
 // WithData 添加数据
 func (res *Response) WithData(data interface{}) *Response {
 	res.Data = data
+	return res
+}
+
+// WithError 添加错误
+func (res *Response) WithError(err error) *Response {
+	xe := httperror.Create(err)
+	res.BizCode = xe.Biz.BizCode
+	res.Msg = xe.Biz.Msg
 	return res
 }

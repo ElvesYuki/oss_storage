@@ -47,9 +47,14 @@ func GetIdHandler(c *gin.Context) {
 
 	fmt.Print("第=", num, "=次请求====")
 
-	id := service.GetId(module)
+	id, err := service.GetId(module)
 
+	if err != nil {
+		httpresult.ErrReturn.WithError(err).Build(c)
+		return
+	}
 	httpresult.OK.WithData(id).Build(c)
+	return
 
 	//httpresult.OK.ConvToPage(1,5).
 	//	WithBiz(httpresult.Err_Param_Big_Code).

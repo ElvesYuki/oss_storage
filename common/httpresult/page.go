@@ -3,6 +3,7 @@ package httpresult
 import (
 	"github.com/gin-gonic/gin"
 	"math"
+	"oss_storage/common/httperror"
 	"time"
 )
 
@@ -37,13 +38,6 @@ func (res *Response) ConvToPage(pageIndex int, pageSize int) *ResponsePage {
 	}
 }
 
-// WithBiz 添加错误码
-func (resp *ResponsePage) WithBiz(biz BizCode) *ResponsePage {
-	resp.BizCode = biz.BizCode
-	resp.Msg = biz.Msg
-	return resp
-}
-
 // WithMsg 添加信息
 func (resp *ResponsePage) WithMsg(msg string) *ResponsePage {
 	resp.Msg = msg
@@ -61,5 +55,13 @@ func (resp *ResponsePage) WithTotal(total int64) *ResponsePage {
 	pageTotal := int(math.Ceil(float64(total / int64(resp.PageSize))))
 	resp.PageTotal = pageTotal
 	resp.Total = total
+	return resp
+}
+
+// WithError 添加错误
+func (resp *ResponsePage) WithError(err error) *ResponsePage {
+	xe := httperror.Create(err)
+	resp.BizCode = xe.Biz.BizCode
+	resp.Msg = xe.Biz.Msg
 	return resp
 }

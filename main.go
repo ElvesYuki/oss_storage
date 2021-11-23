@@ -33,6 +33,7 @@ func main() {
 		fmt.Printf("init logger failed, err:%v\n", err)
 		return
 	}
+	defer zap.L().Sync()
 
 	// 3、初始化 MySQL 的连接
 	fmt.Println("3、初始化 MySQL 的连接")

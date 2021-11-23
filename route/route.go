@@ -3,14 +3,18 @@ package route
 import (
 	"github.com/gin-gonic/gin"
 	"oss_storage/api"
-	"oss_storage/setting/logger"
+	"oss_storage/route/middleware"
 )
 
 func SetUp() *gin.Engine {
 
 	r := gin.New()
 
-	r.Use(logger.GinLogger(), logger.GinRecovery(true))
+	r.Use(middleware.GinLogger())
+
+	r.Use(middleware.GinRecovery(true))
+
+	//r.Use(middleware.GinErrReturn())
 
 	// 注册业务路由
 	v1 := r.Group("/v1")

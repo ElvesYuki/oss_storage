@@ -1,10 +1,12 @@
 package idgenerator
 
 import (
+	"go.uber.org/zap"
 	"math"
+	"oss_storage/common/httperror"
 )
 
-var (
+const (
 	MODULE_DEFAULT = "default"
 	MODULE_TEMP    = "temp"
 	MODULE_TEST    = "test"
@@ -59,7 +61,7 @@ func addSysIdModule(module string) (*idModule, error) {
 	var sysIdModule *idModule
 	sysIdCountArray, err := ListSysIdCount()
 	if err != nil {
-		//fmt.Println("获取module数组出错")
+		err = new(httperror.XmoError).WithBiz(httperror.BIZ_SQL_NOT_EXIST_ERROR)
 		return nil, err
 	}
 
@@ -77,7 +79,8 @@ func addSysIdModule(module string) (*idModule, error) {
 
 	if sysIdModule == nil {
 		// 抛出异常
-		//err =
+		err = new(httperror.XmoError).WithBiz(httperror.BIZ_SQL_NOT_EXIST_ERROR)
+		return nil, err
 	}
 
 	// 用channel更新
@@ -100,7 +103,8 @@ func updateSysIdModule() {
 	// 获取最新的counter
 	sysIdCount, err := GetSysIdCountById(sysIdModule.id)
 	if err != nil {
-		return
+		zap.L().Error(httperror.BIZ_SQL_NOT_EXIST_ERROR.Msg, zap.Error(err))
+		panic(err.Error())
 	}
 	// 更新本地counter
 	sysIdModule.step = sysIdCount.Step
@@ -113,7 +117,8 @@ func updateSysIdModule() {
 
 	// 更新数据库counter
 	if err := UpdateCounterSysIdCountById(sysIdModule.id, sysIdModule.counter+sysIdModule.step); err != nil {
-		return
+		zap.L().Error(httperror.BIZ_SQL_UPDATE_ERROR.Msg, zap.Error(err))
+		panic(err.Error())
 	}
 	// 访问数据库结束
 
@@ -149,18 +154,16 @@ func GetId() int64 {
 	return 1
 }
 
-func GetIdByModule(module string) int64 {
+func GetIdByModule(module string) (id int64, err error) {
 
 	var sysIdModule *idModule
-	var err error
 	var hasModule bool
-	var id int64
 
 	sysIdModule, hasModule = moduleMap[module]
 	if !hasModule {
 		sysIdModule, err = addSysIdModule(module)
 		if err != nil {
-			return 0
+			return 0, err
 		}
 	}
 	go checkIdChan(sysIdModule)
@@ -168,10 +171,10 @@ func GetIdByModule(module string) int64 {
 	id = <-sysIdModule.icChan
 
 	if id == 0 {
-		id = GetIdByModule(module)
+		id, err = GetIdByModule(module)
 	}
 
 	//fmt.Println("生成的Id===>",strconv.FormatInt(id, 10))
 
-	return id
+	return id, err
 }
