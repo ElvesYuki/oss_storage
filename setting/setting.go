@@ -13,6 +13,7 @@ type AppConfig struct {
 	*LogConfig       `mapstructure:"log"`
 	*MySQLConfig     `mapstructure:"mysql"`
 	*RedisConfig     `mapstructure:"redis"`
+	*OssConfig       `mapstructure:"minio"`
 }
 
 type AppDetailConfig struct {
@@ -48,6 +49,13 @@ type RedisConfig struct {
 	Port     string `mapstructure:"port"`
 	DB       int    `mapstructure:"db"`
 	PoolSize int    `mapstructure:"pool_size"`
+}
+
+type OssConfig struct {
+	Endpoint  string `mapstructure:"endpoint"`
+	AccessKey string `mapstructure:"access_key"`
+	SecretKey string `mapstructure:"secret_key"`
+	UseSSL    bool   `mapstructure:"use_ssl"`
 }
 
 func Init() (err error) {

@@ -1,11 +1,14 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/minio/minio-go/v7"
 	"net/http"
 	"oss_storage/common/httpresult"
 	"oss_storage/service"
+	"oss_storage/setting/oss"
 	"strconv"
 )
 
@@ -55,11 +58,28 @@ func GetIdHandler(c *gin.Context) {
 	}
 	httpresult.OK.WithData(id).Build(c)
 	return
+}
 
-	//httpresult.OK.ConvToPage(1,5).
-	//	WithBiz(httpresult.Err_Param_Big_Code).
-	//	WithTotal(14).
-	//	WithData(id).
-	//	Build(c)
+func TestMinio(c *gin.Context) {
+
+	file, _ := c.FormFile("file")
+	fmt.Println(file.Filename)
+
+	src, err := file.Open()
+	if err != nil {
+		return
+	}
+	defer src.Close()
+
+	uploadInfo, err := oss.Client.PutObject(context.Background(),
+		"oss-storage",
+		file.Filename, src, -1,
+		minio.PutObjectOptions{
+			ContentType: file.Header.Get("Content-Type"),
+		})
+	if err != nil {
+		return
+	}
+	fmt.Println(uploadInfo)
 
 }

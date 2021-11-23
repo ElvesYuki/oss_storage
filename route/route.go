@@ -14,8 +14,6 @@ func SetUp() *gin.Engine {
 
 	r.Use(middleware.GinRecovery(true))
 
-	//r.Use(middleware.GinErrReturn())
-
 	// 注册业务路由
 	v1 := r.Group("/v1")
 	{
@@ -23,6 +21,7 @@ func SetUp() *gin.Engine {
 		v1.GET("/test/idGenerate", api.ListIdGenerateHandler)
 		v1.GET("/test/idGenerate/:id", api.GetIdGenerateByIdHandler)
 		v1.GET("/test/get/id", api.GetIdHandler)
+		v1.POST("/test/minio", api.TestMinio)
 	}
 
 	return r

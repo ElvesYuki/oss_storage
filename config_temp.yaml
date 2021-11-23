@@ -27,3 +27,9 @@ redis:
   password: "password"
   db: 0
   pool_size: 5
+
+minio:
+  endpoint: ""
+  access_key: ""
+  secret_key: ""
+  use_ssl: true

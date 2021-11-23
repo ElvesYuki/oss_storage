@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net"
@@ -81,16 +80,4 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 		}()
 		c.Next()
 	}
-}
-
-// GinErrReturn 如果有错误码，则返回
-func GinErrReturn() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		defer func() {
-
-			fmt.Println("错误返回")
-
-		}()
-	}
-
 }

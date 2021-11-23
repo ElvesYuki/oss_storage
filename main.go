@@ -12,6 +12,7 @@ import (
 	"oss_storage/setting"
 	"oss_storage/setting/logger"
 	"oss_storage/setting/mysql"
+	"oss_storage/setting/oss"
 	"oss_storage/setting/redis"
 	"syscall"
 	"time"
@@ -62,6 +63,14 @@ func main() {
 	err = idgenerator.Init()
 	if err != nil {
 		fmt.Printf("init idgenerator failed, err:%v\n", err)
+		return
+	}
+
+	// 7、初始化MinioClient
+	fmt.Println("7、初始化MinioClient")
+	err = oss.Init(setting.Conf.OssConfig)
+	if err != nil {
+		fmt.Printf("init minio client failed, err:%v\n", err)
 		return
 	}
 
