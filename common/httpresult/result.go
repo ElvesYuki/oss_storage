@@ -24,28 +24,40 @@ func response(success bool, code int, bizCode string, msg string) *Response {
 	}
 }
 
-// Build 请求返回
-func (res *Response) Build(c *gin.Context) {
-	res.Ts = time.Now().UnixMilli()
-	c.JSON(res.Code, res)
+type ResBuilder struct {
+	res *Response
 }
 
-// WithMsg 添加信息
-func (res *Response) WithMsg(msg string) *Response {
-	res.Msg = msg
-	return res
+// NewBuilder 建造者
+func (res *Response) NewBuilder() *ResBuilder {
+	b := new(ResBuilder)
+	b.res = res
+	return b
 }
 
-// WithData 添加数据
-func (res *Response) WithData(data interface{}) *Response {
-	res.Data = data
-	return res
+// Msg 添加信息
+func (b *ResBuilder) Msg(msg string) *ResBuilder {
+	b.res.Msg = msg
+	return b
 }
 
-// WithError 添加错误
-func (res *Response) WithError(err error) *Response {
+// Data 添加数据
+func (b *ResBuilder) Data(data interface{}) *ResBuilder {
+	b.res.Data = data
+	return b
+}
+
+// Error 添加错误信息
+func (b *ResBuilder) Error(err error) *ResBuilder {
 	xe := httperror.Create(err)
-	res.BizCode = xe.Biz.BizCode
-	res.Msg = xe.Biz.Msg
-	return res
+	b.res.BizCode = xe.Biz.BizCode
+	b.res.Msg = xe.Biz.Msg
+	return b
+}
+
+// Build 构造返回
+func (b *ResBuilder) Build(c *gin.Context) {
+	b.res.Ts = time.Now().UnixMilli()
+	resReturn := b.res
+	c.JSON(resReturn.Code, resReturn)
 }

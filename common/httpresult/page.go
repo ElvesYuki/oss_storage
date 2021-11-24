@@ -20,11 +20,6 @@ type ResponsePage struct {
 	Total     int64       `json:"total"`     // 总数量
 }
 
-func (resp *ResponsePage) Build(c *gin.Context) {
-	resp.Ts = time.Now().UnixMilli()
-	c.JSON(resp.Code, resp)
-}
-
 // ConvToPage 转换成分页返回
 func (res *Response) ConvToPage(pageIndex int, pageSize int) *ResponsePage {
 	return &ResponsePage{
@@ -38,30 +33,48 @@ func (res *Response) ConvToPage(pageIndex int, pageSize int) *ResponsePage {
 	}
 }
 
-// WithMsg 添加信息
-func (resp *ResponsePage) WithMsg(msg string) *ResponsePage {
-	resp.Msg = msg
-	return resp
+type RespBuilder struct {
+	resp *ResponsePage
 }
 
-// WithData 添加数据
-func (resp *ResponsePage) WithData(data interface{}) *ResponsePage {
-	resp.Data = data
-	return resp
+// NewBuilder 建造者
+func (resp *ResponsePage) NewBuilder() *RespBuilder {
+	b := new(RespBuilder)
+	b.resp = resp
+	return b
 }
 
-// WithTotal 添加分页总数
-func (resp *ResponsePage) WithTotal(total int64) *ResponsePage {
-	pageTotal := int(math.Ceil(float64(total / int64(resp.PageSize))))
-	resp.PageTotal = pageTotal
-	resp.Total = total
-	return resp
+// Msg 添加信息
+func (b *RespBuilder) Msg(msg string) *RespBuilder {
+	b.resp.Msg = msg
+	return b
 }
 
-// WithError 添加错误
-func (resp *ResponsePage) WithError(err error) *ResponsePage {
+// Data 添加数据
+func (b *RespBuilder) Data(data interface{}) *RespBuilder {
+	b.resp.Data = data
+	return b
+}
+
+// Total 添加分页总数
+func (b *RespBuilder) Total(total int64) *RespBuilder {
+	pageTotal := int(math.Ceil(float64(total / int64(b.resp.PageSize))))
+	b.resp.PageTotal = pageTotal
+	b.resp.Total = total
+	return b
+}
+
+// Error 添加错误信息
+func (b *RespBuilder) Error(err error) *RespBuilder {
 	xe := httperror.Create(err)
-	resp.BizCode = xe.Biz.BizCode
-	resp.Msg = xe.Biz.Msg
-	return resp
+	b.resp.BizCode = xe.Biz.BizCode
+	b.resp.Msg = xe.Biz.Msg
+	return b
+}
+
+// Build 构造返回
+func (b *RespBuilder) Build(c *gin.Context) {
+	b.resp.Ts = time.Now().UnixMilli()
+	respReturn := b.resp
+	c.JSON(respReturn.Code, respReturn)
 }

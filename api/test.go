@@ -7,8 +7,8 @@ import (
 	"github.com/minio/minio-go/v7"
 	"net/http"
 	"oss_storage/common/httpresult"
+	"oss_storage/pkg/oss"
 	"oss_storage/service"
-	"oss_storage/setting/oss"
 	"strconv"
 )
 
@@ -53,10 +53,11 @@ func GetIdHandler(c *gin.Context) {
 	id, err := service.GetId(module)
 
 	if err != nil {
-		httpresult.ErrReturn.WithError(err).Build(c)
+		httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
 		return
 	}
-	httpresult.OK.WithData(id).Build(c)
+	httpresult.OK.NewBuilder().Data(id).Build(c)
+
 	return
 }
 
@@ -71,7 +72,7 @@ func TestMinio(c *gin.Context) {
 	}
 	defer src.Close()
 
-	uploadInfo, err := oss.Client.PutObject(context.Background(),
+	uploadInfo, err := oss.OC.GetClient().MinioClient.PutObject(context.Background(),
 		"oss-storage",
 		file.Filename, src, -1,
 		minio.PutObjectOptions{
