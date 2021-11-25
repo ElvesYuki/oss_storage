@@ -7,10 +7,10 @@ import (
 )
 
 type SysIdCount struct {
-	Id      int64  `json:"id"`
-	Module  string `json:"module"`
-	Step    int64  `json:"step"`
-	Counter int64  `json:"counter"`
+	Id      sql.NullInt64  `db:"id"`
+	Module  sql.NullString `db:"module"`
+	Step    sql.NullInt64  `db:"step"`
+	Counter sql.NullInt64  `db:"counter"`
 }
 
 func ListSysIdCount() (data []*SysIdCount, err error) {

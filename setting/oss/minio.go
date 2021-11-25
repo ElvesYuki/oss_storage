@@ -17,7 +17,7 @@ func Init(cfg *setting.OssConfig) (err error) {
 
 	client, err := minio.New(cfg.Endpoint, option)
 	if err != nil {
-		zap.L().Error("connect DB failed", zap.Error(err))
+		zap.L().Error("connect minio failed", zap.Error(err))
 		return nil
 	}
 
@@ -26,6 +26,9 @@ func Init(cfg *setting.OssConfig) (err error) {
 	}
 
 	oss.OC = &oss.MinioClient{MinioClient: minioClient}
+
+	// 初始化Oss包
+	oss.Init()
 
 	return nil
 }

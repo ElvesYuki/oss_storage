@@ -82,5 +82,19 @@ func TestMinio(c *gin.Context) {
 		return
 	}
 	fmt.Println(uploadInfo)
+}
+
+func TestMinioHandler(c *gin.Context) {
+
+	file, _ := c.FormFile("file")
+	fmt.Println(file.Filename)
+
+	object, err := oss.UH.UploadObject("testoss", file)
+	if err != nil {
+		httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
+		return
+	}
+	fmt.Println(object)
+	httpresult.OK.NewBuilder().Data(object).Build(c)
 
 }

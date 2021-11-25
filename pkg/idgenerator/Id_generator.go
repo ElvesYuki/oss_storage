@@ -39,11 +39,11 @@ func Init() (err error) {
 	for _, sysIdCount := range sysIdCountArray {
 		// 构造 moduleMap
 		sysIdModule := new(idModule)
-		sysIdModule.id = sysIdCount.Id
-		sysIdModule.module = sysIdCount.Module
-		sysIdModule.step = sysIdCount.Step
-		sysIdModule.bufferSize = int64(math.Ceil(float64(sysIdCount.Step) * 1.2))
-		sysIdModule.counter = sysIdCount.Counter
+		sysIdModule.id = sysIdCount.Id.Int64
+		sysIdModule.module = sysIdCount.Module.String
+		sysIdModule.step = sysIdCount.Step.Int64
+		sysIdModule.bufferSize = int64(math.Ceil(float64(sysIdCount.Step.Int64) * 1.2))
+		sysIdModule.counter = sysIdCount.Counter.Int64
 		sysIdModule.icChan = make(chan int64, sysIdModule.bufferSize)
 
 		moduleMap[sysIdModule.module] = sysIdModule
@@ -66,13 +66,13 @@ func addSysIdModule(module string) (*idModule, error) {
 	}
 
 	for _, sysIdCount := range sysIdCountArray {
-		if module == sysIdCount.Module {
+		if module == sysIdCount.Module.String {
 			sysIdModule = new(idModule)
-			sysIdModule.id = sysIdCount.Id
-			sysIdModule.module = sysIdCount.Module
-			sysIdModule.step = sysIdCount.Step
-			sysIdModule.bufferSize = int64(math.Ceil(float64(sysIdCount.Step) * 1.2))
-			sysIdModule.counter = sysIdCount.Counter
+			sysIdModule.id = sysIdCount.Id.Int64
+			sysIdModule.module = sysIdCount.Module.String
+			sysIdModule.step = sysIdCount.Step.Int64
+			sysIdModule.bufferSize = int64(math.Ceil(float64(sysIdCount.Step.Int64) * 1.2))
+			sysIdModule.counter = sysIdCount.Counter.Int64
 			sysIdModule.icChan = make(chan int64, sysIdModule.bufferSize)
 		}
 	}
@@ -107,9 +107,9 @@ func updateSysIdModule() {
 		panic(err.Error())
 	}
 	// 更新本地counter
-	sysIdModule.step = sysIdCount.Step
-	sysIdModule.bufferSize = int64(math.Ceil(float64(sysIdCount.Step) * 1.2))
-	sysIdModule.counter = sysIdCount.Counter
+	sysIdModule.step = sysIdCount.Step.Int64
+	sysIdModule.bufferSize = int64(math.Ceil(float64(sysIdCount.Step.Int64) * 1.2))
+	sysIdModule.counter = sysIdCount.Counter.Int64
 
 	// 用channel更新
 	updateModuleMapChan <- sysIdModule

@@ -16,6 +16,6 @@ type MinioClient struct {
 	MinioClient *Client
 }
 
-func (oc MinioClient) GetClient() *Client {
+func (oc *MinioClient) GetClient() *Client {
 	return oc.MinioClient
 }

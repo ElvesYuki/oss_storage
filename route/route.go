@@ -22,6 +22,7 @@ func SetUp() *gin.Engine {
 		v1.GET("/test/idGenerate/:id", api.GetIdGenerateByIdHandler)
 		v1.GET("/test/get/id", api.GetIdHandler)
 		v1.POST("/test/minio", api.TestMinio)
+		v1.POST("/test/minio/handler", api.TestMinioHandler)
 	}
 
 	return r
