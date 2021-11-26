@@ -4,9 +4,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net"
-	"net/http"
 	"net/http/httputil"
 	"os"
+	"oss_storage/common/httperror"
+	"oss_storage/common/httpresult"
 	"runtime/debug"
 	"strings"
 	"time"
@@ -74,8 +75,9 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 						zap.String("request", string(httpRequest)),
 					)
 				}
-				c.AbortWithStatus(http.StatusInternalServerError)
-				//httpresult.Err.WithBiz(httpresult.Biz_System_Error).Build(c)
+				//c.AbortWithStatus(http.StatusInternalServerError)
+				errReturn := new(httperror.XmoError).WithBiz(httperror.BIZ_DEFAULT_ERROR)
+				httpresult.ErrReturn.NewBuilder().Error(errReturn).Build(c)
 			}
 		}()
 		c.Next()

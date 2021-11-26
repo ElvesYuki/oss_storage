@@ -1,0 +1,112 @@
+definitions:
+  httpresult.Response:
+    properties:
+      bizCode:
+        description: 响应业务码
+        type: string
+      code:
+        description: 响应码
+        type: integer
+      data:
+        description: 响应数据
+      msg:
+        description: 响应信息
+        type: string
+      success:
+        description: 响应是否成功
+        type: boolean
+      ts:
+        description: 响应时间戳
+        type: integer
+    type: object
+  oss.BaseObject:
+    properties:
+      bucket:
+        description: 对象存储bucket
+        type: string
+      contentType:
+        description: 对象contentType
+        type: string
+      fileName:
+        description: 对象源文件name
+        type: string
+      format:
+        description: 对象格式，文件名后缀
+        type: string
+      object:
+        description: 对象路径
+        type: string
+      size:
+        description: 对象大小，单位Byte
+        type: integer
+      uploadStatus:
+        description: 上传状态
+        type: integer
+      url:
+        description: 真实对象地址
+        type: string
+    type: object
+host: localhost:9091
+info:
+  contact:
+    email: 1026770043@qq.com
+    name: luohuan
+    url: https://elvesyuki.com
+  description: Oss对象存储
+  termsOfService: https://elvesyuki.com
+  title: Oss对象存储
+  version: "1.0"
+paths:
+  /v1/oss/multiple/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Oss多文件上传接口
+      parameters:
+      - description: 对象文件数组
+        in: formData
+        name: files
+        required: true
+        type: file
+      - description: 上传编码
+        in: formData
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httpresult.Response'
+      summary: Oss多文件上传接口
+      tags:
+      - Oss相关接口
+  /v1/oss/single/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Oss单个文件上传接口
+      parameters:
+      - description: 对象文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: 上传编码
+        in: formData
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/oss.BaseObject'
+      summary: Oss单个文件上传接口
+      tags:
+      - Oss相关接口
+swagger: "2.0"

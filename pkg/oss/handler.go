@@ -26,6 +26,7 @@ type UploadObject struct {
 	versionId   string
 }
 
+// UploadObjectHandler 上传处理器
 func UploadObjectHandler(code string, object interface{}) (objectReturn interface{}, err error) {
 
 	path, hasCode := ossStoragePathDTOMap[code]
@@ -61,13 +62,11 @@ func UploadObjectHandler(code string, object interface{}) (objectReturn interfac
 		return nil, err
 	}
 	return objectReturn, nil
-
 }
 
 func uploadMultipartFile(path *dto.OssStoragePathDTO, oType *ObjectTypeItem, object *multipart.FileHeader) (objectReturn interface{}, err error) {
 
 	// 封装上传对象
-
 	srcReader, err := object.Open()
 	defer srcReader.Close()
 	if err != nil {

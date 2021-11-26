@@ -18,6 +18,17 @@ import (
 	"time"
 )
 
+// @title Oss对象存储
+// @version 1.0
+// @description Oss对象存储
+// @termsOfService https://elvesyuki.com
+
+// @contact.name luohuan
+// @contact.url https://elvesyuki.com
+// @contact.email 1026770043@qq.com
+
+// @host localhost:9091
+// @BasePath
 func main() {
 	// 1、加载 配置
 	fmt.Println("1、加载 配置")
