@@ -137,6 +137,7 @@ func updateSysIdModule() {
 
 // updateModuleMap 更新本地的ModuleMap
 func updateModuleMap() {
+	// TODO 写锁
 	updateIdModule := <-updateModuleMapChan
 	moduleMap[updateIdModule.module] = updateIdModule
 }
@@ -150,8 +151,8 @@ func checkIdChan(sysIdModule *idModule) {
 	}
 }
 
-func GetId() int64 {
-	return 1
+func GetId() (int64, error) {
+	return GetIdByModule(MODULE_DEFAULT)
 }
 
 func GetIdByModule(module string) (id int64, err error) {
@@ -159,6 +160,7 @@ func GetIdByModule(module string) (id int64, err error) {
 	var sysIdModule *idModule
 	var hasModule bool
 
+	// TODO  获取写锁
 	sysIdModule, hasModule = moduleMap[module]
 	if !hasModule {
 		sysIdModule, err = addSysIdModule(module)
