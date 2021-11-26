@@ -5,18 +5,18 @@ import (
 	"oss_storage/entity/dto"
 )
 
-type IUploadFactory interface {
+type iUploadFactory interface {
 	getFacType() string
-	getOssObject(path *dto.OssStoragePathDTO, oType *ObjectTypeItem, object *UploadObject) (interface{}, error)
+	getOssObject(path *dto.OssStoragePathDTO, oType *objectTypeItem, object *uploadObject) (interface{}, error)
 }
 
-type UploadFactory struct{}
+type uploadFactory struct{}
 
-func (uf *UploadFactory) getFacType() string {
+func (uf *uploadFactory) getFacType() string {
 	return objectTypeEnum.OBJECT_TYPE_DEFAULT.ObjectType
 }
 
-func (uf *UploadFactory) getOssObject(path *dto.OssStoragePathDTO, oType *ObjectTypeItem, object *UploadObject) (interface{}, error) {
+func (uf *uploadFactory) getOssObject(path *dto.OssStoragePathDTO, oType *objectTypeItem, object *uploadObject) (interface{}, error) {
 
 	// 检验格式是否正确
 	_, hasFormat := path.ObjectSuffix[object.format]
@@ -61,4 +61,57 @@ func (uf *UploadFactory) getOssObject(path *dto.OssStoragePathDTO, oType *Object
 	}
 
 	return objectReturn, nil
+}
+
+type jsonFactory struct{}
+
+func (jf *jsonFactory) getFacType() string {
+	return objectTypeEnum.OBJECT_TYPE_JSON.ObjectType
+}
+
+func (jf *jsonFactory) getOssObject(path *dto.OssStoragePathDTO, oType *objectTypeItem, object *uploadObject) (interface{}, error) {
+
+	ossReturn, err := defaultUploadFactory.getOssObject(path, oType, object)
+	if err != nil {
+		return nil, err
+	}
+
+	jsonObject := &JsonObject{}
+
+	switch v := ossReturn.(type) {
+	case *BaseObject:
+		jsonObject.BaseObject = *v
+	default:
+		return nil, new(httperror.XmoError).WithBiz(httperror.BIZ_OSS_UNKNOWN_TYPE_ERROR)
+	}
+	jsonObject.ContentExcerpt = "文本节选"
+
+	return jsonObject, nil
+}
+
+type htmlFactory struct{}
+
+func (jf *htmlFactory) getFacType() string {
+	return objectTypeEnum.OBJECT_TYPE_HTML.ObjectType
+}
+
+func (jf *htmlFactory) getOssObject(path *dto.OssStoragePathDTO, oType *objectTypeItem, object *uploadObject) (interface{}, error) {
+
+	ossReturn, err := defaultUploadFactory.getOssObject(path, oType, object)
+	if err != nil {
+		return nil, err
+	}
+
+	htmlObject := &HtmlObject{}
+
+	switch v := ossReturn.(type) {
+	case *BaseObject:
+		htmlObject.BaseObject = *v
+	default:
+		return nil, new(httperror.XmoError).WithBiz(httperror.BIZ_OSS_UNKNOWN_TYPE_ERROR)
+	}
+
+	htmlObject.ContentExcerpt = "文本节选"
+
+	return htmlObject, nil
 }

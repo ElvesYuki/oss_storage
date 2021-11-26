@@ -7,12 +7,13 @@ import (
 	"mime/multipart"
 	"oss_storage/common/httperror"
 	"oss_storage/entity/dto"
+	"strings"
 )
 
 var ossStoragePathDTOMap map[string]*dto.OssStoragePathDTO
 
 // UploadObject 封装的上传对象
-type UploadObject struct {
+type uploadObject struct {
 	cover       bool
 	ossType     string
 	ossContent  interface{}
@@ -26,8 +27,8 @@ type UploadObject struct {
 	versionId   string
 }
 
-// UploadObjectHandler 上传处理器
-func UploadObjectHandler(code string, object interface{}) (objectReturn interface{}, err error) {
+// uploadObjectHandler 上传处理器
+func uploadObjectHandler(code string, object interface{}) (objectReturn interface{}, err error) {
 
 	path, hasCode := ossStoragePathDTOMap[code]
 	if !hasCode {
@@ -64,7 +65,7 @@ func UploadObjectHandler(code string, object interface{}) (objectReturn interfac
 	return objectReturn, nil
 }
 
-func uploadMultipartFile(path *dto.OssStoragePathDTO, oType *ObjectTypeItem, object *multipart.FileHeader) (objectReturn interface{}, err error) {
+func uploadMultipartFile(path *dto.OssStoragePathDTO, oType *objectTypeItem, object *multipart.FileHeader) (objectReturn interface{}, err error) {
 
 	// 封装上传对象
 	srcReader, err := object.Open()
@@ -73,7 +74,7 @@ func uploadMultipartFile(path *dto.OssStoragePathDTO, oType *ObjectTypeItem, obj
 		return nil, err
 	}
 
-	uploadObject := &UploadObject{
+	uploadObject := &uploadObject{
 		cover:       false,
 		ossType:     oType.ObjectType,
 		ossContent:  object,
@@ -84,10 +85,14 @@ func uploadMultipartFile(path *dto.OssStoragePathDTO, oType *ObjectTypeItem, obj
 		size:        object.Size,
 	}
 
-	// 分配器分配对象工厂
+	// 调度器 分配 对象工厂
+	uploadFactory, err := uploadObjectDispatcher(oType)
+	if err != nil {
+		return nil, err
+	}
 
 	// 工厂上传
-	objectReturn, err = UF.getOssObject(path, oType, uploadObject)
+	objectReturn, err = uploadFactory.getOssObject(path, oType, uploadObject)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +103,38 @@ func uploadMultipartFile(path *dto.OssStoragePathDTO, oType *ObjectTypeItem, obj
 	return objectReturn, err
 }
 
-func uploadString(path *dto.OssStoragePathDTO, oType *ObjectTypeItem, object string) (objectReturn interface{}, err error) {
+func uploadString(path *dto.OssStoragePathDTO, oType *objectTypeItem, object string) (objectReturn interface{}, err error) {
 
-	return nil, err
+	ossName, hasName := defaultOssNameMap[oType.ObjectType]
+	if !hasName {
+		return nil, new(httperror.XmoError).WithBiz(httperror.BIZ_ARG_ERROR)
+	}
+
+	uploadObject := &uploadObject{
+		cover:       false,
+		ossType:     oType.ObjectType,
+		ossContent:  object,
+		ossReader:   strings.NewReader(object),
+		ossName:     ossName,
+		format:      GetFileSuffix(ossName),
+		contentType: oType.ContentType,
+		size:        int64(len(object)),
+	}
+
+	// 调度器 分配 对象工厂
+	uploadFactory, err := uploadObjectDispatcher(oType)
+	if err != nil {
+		return nil, err
+	}
+
+	// 工厂上传
+	objectReturn, err = uploadFactory.getOssObject(path, oType, uploadObject)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println(uploadObject)
+	fmt.Println(objectReturn)
+
+	return objectReturn, err
 }

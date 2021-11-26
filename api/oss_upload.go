@@ -12,7 +12,7 @@ import (
 // OssSingleUploadHandler Oss单个文件上传接口
 // @Summary Oss单个文件上传接口
 // @Description Oss单个文件上传接口
-// @Tags Oss相关接口
+// @Tags Oss上传相关接口
 // @Accept multipart/form-data
 // @Produce application/json
 // @Param file formData file true "对象文件"
@@ -29,7 +29,8 @@ func OssSingleUploadHandler(c *gin.Context) {
 	}
 	code := c.PostForm("code")
 
-	object, err := oss.UploadObjectHandler(code, file)
+	// 文件上传
+	object, err := oss.UploadObjectUtil(code, file)
 	if err != nil {
 		httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
 		return
@@ -41,7 +42,7 @@ func OssSingleUploadHandler(c *gin.Context) {
 // OssMultipleUploadHandler Oss多文件上传接口
 // @Summary Oss多文件上传接口
 // @Description Oss多文件上传接口
-// @Tags Oss相关接口
+// @Tags Oss上传相关接口
 // @Accept multipart/form-data
 // @Produce application/json
 // @Param files formData file true "对象文件数组"
@@ -68,7 +69,8 @@ func OssMultipleUploadHandler(c *gin.Context) {
 	objects := make([]interface{}, len(files))
 
 	for i, file := range files {
-		object, err := oss.UploadObjectHandler(code, file)
+		// 文件上传
+		object, err := oss.UploadObjectUtil(code, file)
 		if err != nil {
 			httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
 			return
@@ -78,4 +80,29 @@ func OssMultipleUploadHandler(c *gin.Context) {
 
 	httpresult.OK.NewBuilder().Data(objects).Build(c)
 	return
+}
+
+// OssTextUploadHandler Oss文本上传接口
+// @Summary Oss文本上传接口
+// @Description Oss文本上传接口
+// @Tags Oss上传相关接口
+// @Accept multipart/form-data
+// @Produce application/json
+// @Param text formData string true "文本内容"
+// @Param code formData string true "上传编码"
+// @Success 200 {object} oss.BaseObject
+// @Router /v1/oss/text/upload [post]
+func OssTextUploadHandler(c *gin.Context) {
+
+	text := c.PostForm("text")
+	code := c.PostForm("code")
+
+	// 文本上传
+	object, err := oss.UploadObjectUtil(code, text)
+	if err != nil {
+		httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
+		return
+	}
+	fmt.Println(object)
+	httpresult.OK.NewBuilder().Data(object).Build(c)
 }

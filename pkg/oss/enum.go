@@ -1,19 +1,19 @@
 package oss
 
-var objectTypeMap map[string]*ObjectTypeItem
+var objectTypeMap map[string]*objectTypeItem
 
-type ObjectType struct {
-	OBJECT_TYPE_DEFAULT *ObjectTypeItem
+type objectType struct {
+	OBJECT_TYPE_DEFAULT *objectTypeItem
 
-	OBJECT_TYPE_IMAGE *ObjectTypeItem
-	OBJECT_TYPE_VIDEO *ObjectTypeItem
-	OBJECT_TYPE_AUDIO *ObjectTypeItem
+	OBJECT_TYPE_IMAGE *objectTypeItem
+	OBJECT_TYPE_VIDEO *objectTypeItem
+	OBJECT_TYPE_AUDIO *objectTypeItem
 
-	OBJECT_TYPE_JSON *ObjectTypeItem
-	OBJECT_TYPE_HTML *ObjectTypeItem
+	OBJECT_TYPE_JSON *objectTypeItem
+	OBJECT_TYPE_HTML *objectTypeItem
 }
 
-var objectTypeEnum = &ObjectType{
+var objectTypeEnum = &objectType{
 	OBJECT_TYPE_DEFAULT: newObjectTypeItem("default", "default", "default", "默认类型，需要自行判断"),
 	//
 	OBJECT_TYPE_IMAGE: newObjectTypeItem("image", "default", "default", "图像类型"),
@@ -24,15 +24,15 @@ var objectTypeEnum = &ObjectType{
 	OBJECT_TYPE_HTML: newObjectTypeItem("html", "html", "text/html", "富文本片段"),
 }
 
-type ObjectTypeItem struct {
+type objectTypeItem struct {
 	ObjectType   string
 	ObjectSuffix string
 	ContentType  string
 	Desc         string
 }
 
-func newObjectTypeItem(ObjectType string, ObjectSuffix string, ContentType string, Desc string) *ObjectTypeItem {
-	return &ObjectTypeItem{
+func newObjectTypeItem(ObjectType string, ObjectSuffix string, ContentType string, Desc string) *objectTypeItem {
+	return &objectTypeItem{
 		ObjectType:   ObjectType,
 		ObjectSuffix: ObjectSuffix,
 		ContentType:  ContentType,
