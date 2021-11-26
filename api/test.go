@@ -89,7 +89,7 @@ func TestMinioHandler(c *gin.Context) {
 	file, _ := c.FormFile("file")
 	fmt.Println(file.Filename)
 
-	object, err := oss.UH.UploadObject("testoss", file)
+	object, err := oss.UploadObjectHandler("testoss", file)
 	if err != nil {
 		httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
 		return

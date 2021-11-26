@@ -17,6 +17,10 @@ func SetUp() *gin.Engine {
 	// 注册业务路由
 	v1 := r.Group("/v1")
 	{
+
+		v1.POST("/oss/single/upload", api.OssSingleUploadHandler)
+		v1.POST("/oss/multiple/upload", api.OssMultipleUploadHandler)
+
 		v1.GET("/test", api.Test)
 		v1.GET("/test/idGenerate", api.ListIdGenerateHandler)
 		v1.GET("/test/idGenerate/:id", api.GetIdGenerateByIdHandler)

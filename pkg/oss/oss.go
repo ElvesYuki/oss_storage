@@ -11,8 +11,6 @@ var UO IUploadOperator
 
 var UF IUploadFactory
 
-var UH IUploadHandler
-
 func Init() {
 	ossStoragePath, err := dao.ListOssStoragePath()
 	if err != nil {
@@ -45,6 +43,4 @@ func Init() {
 	// 初始化 UploadFactory
 	UF = new(UploadFactory)
 
-	// 初始化 UploadHandler
-	UH = new(UploadHandler)
 }

@@ -26,13 +26,7 @@ type UploadObject struct {
 	versionId   string
 }
 
-type IUploadHandler interface {
-	UploadObject(code string, object interface{}) (interface{}, error)
-}
-
-type UploadHandler struct{}
-
-func (handler *UploadHandler) UploadObject(code string, object interface{}) (objectReturn interface{}, err error) {
+func UploadObjectHandler(code string, object interface{}) (objectReturn interface{}, err error) {
 
 	path, hasCode := ossStoragePathDTOMap[code]
 	if !hasCode {
