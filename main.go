@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/signal"
 	"oss_storage/pkg/idgenerator"
+	"oss_storage/pkg/sensitiveword"
 	"oss_storage/route"
 	"oss_storage/setting"
 	"oss_storage/setting/logger"
@@ -84,6 +85,8 @@ func main() {
 		fmt.Printf("init minio client failed, err:%v\n", err)
 		return
 	}
+
+	sensitiveword.Init()
 
 	// 启动服务(优雅关机)
 	fmt.Println("6、启动服务(优雅关机)")
