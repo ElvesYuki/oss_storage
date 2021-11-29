@@ -68,10 +68,10 @@ func uploadMultipartFile(path *dto.OssStoragePathDTO, oType *objectTypeItem, obj
 
 	// 封装上传对象
 	srcReader, err := object.Open()
-	defer srcReader.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer srcReader.Close()
 
 	uploadObject := &uploadObject{
 		cover:       false,
@@ -84,6 +84,11 @@ func uploadMultipartFile(path *dto.OssStoragePathDTO, oType *objectTypeItem, obj
 		size:        object.Size,
 	}
 
+	// 计算MD5 存入日志
+	packOssEventChan := make(chan *dto.OssEventDTO)
+	defer close(packOssEventChan)
+	go PackMultipartOssEventChan(uploadObject, object, packOssEventChan)
+
 	// 调度器 分配 对象工厂
 	uploadFactory, err := uploadObjectDispatcher(oType)
 	if err != nil {
@@ -92,6 +97,13 @@ func uploadMultipartFile(path *dto.OssStoragePathDTO, oType *objectTypeItem, obj
 
 	// 工厂上传
 	objectReturn, err = uploadFactory.getOssObject(path, oType, uploadObject)
+	if err != nil {
+		return nil, err
+	}
+
+	// 记录日志对象
+	ossEventDTO := <-packOssEventChan
+	err = LogRecordOssEvent(objectReturn, ossEventDTO)
 	if err != nil {
 		return nil, err
 	}
@@ -117,6 +129,11 @@ func uploadString(path *dto.OssStoragePathDTO, oType *objectTypeItem, object str
 		size:        int64(len(object)),
 	}
 
+	// 计算MD5 存入日志
+	packOssEventChan := make(chan *dto.OssEventDTO)
+	defer close(packOssEventChan)
+	go PackStringOssEventChan(uploadObject, object, packOssEventChan)
+
 	// 调度器 分配 对象工厂
 	uploadFactory, err := uploadObjectDispatcher(oType)
 	if err != nil {
@@ -125,6 +142,13 @@ func uploadString(path *dto.OssStoragePathDTO, oType *objectTypeItem, object str
 
 	// 工厂上传
 	objectReturn, err = uploadFactory.getOssObject(path, oType, uploadObject)
+	if err != nil {
+		return nil, err
+	}
+
+	// 记录日志对象
+	ossEventDTO := <-packOssEventChan
+	err = LogRecordOssEvent(objectReturn, ossEventDTO)
 	if err != nil {
 		return nil, err
 	}
@@ -194,6 +218,11 @@ func coverMultipartFile(path *dto.OssStoragePathDTO, oType *objectTypeItem, url 
 		objectName:  objectName,
 	}
 
+	// 计算MD5 存入日志
+	packOssEventChan := make(chan *dto.OssEventDTO)
+	defer close(packOssEventChan)
+	go PackMultipartOssEventChan(uploadObject, object, packOssEventChan)
+
 	// 调度器 分配 对象工厂
 	uploadFactory, err := uploadObjectDispatcher(oType)
 	if err != nil {
@@ -202,6 +231,13 @@ func coverMultipartFile(path *dto.OssStoragePathDTO, oType *objectTypeItem, url 
 
 	// 工厂上传
 	objectReturn, err = uploadFactory.getOssObject(path, oType, uploadObject)
+	if err != nil {
+		return nil, err
+	}
+
+	// 记录日志对象
+	ossEventDTO := <-packOssEventChan
+	err = LogRecordOssEvent(objectReturn, ossEventDTO)
 	if err != nil {
 		return nil, err
 	}
@@ -231,6 +267,11 @@ func coverString(path *dto.OssStoragePathDTO, oType *objectTypeItem, url string,
 		objectName:  objectName,
 	}
 
+	// 计算MD5 存入日志
+	packOssEventChan := make(chan *dto.OssEventDTO)
+	defer close(packOssEventChan)
+	go PackStringOssEventChan(uploadObject, object, packOssEventChan)
+
 	// 调度器 分配 对象工厂
 	uploadFactory, err := uploadObjectDispatcher(oType)
 	if err != nil {
@@ -239,6 +280,13 @@ func coverString(path *dto.OssStoragePathDTO, oType *objectTypeItem, url string,
 
 	// 工厂上传
 	objectReturn, err = uploadFactory.getOssObject(path, oType, uploadObject)
+	if err != nil {
+		return nil, err
+	}
+
+	// 记录日志对象
+	ossEventDTO := <-packOssEventChan
+	err = LogRecordOssEvent(objectReturn, ossEventDTO)
 	if err != nil {
 		return nil, err
 	}

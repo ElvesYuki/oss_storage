@@ -19,6 +19,7 @@ func listSensitiveWord(wordChan chan *sensitiveWord, partSize int64) error {
 	err := mysql.DB.Get(&count, sqlStr)
 	if err != nil {
 		zap.L().Error("敏感词查询数目错误", zap.Error(err))
+		return err
 	}
 
 	// 分批次查询
@@ -28,6 +29,7 @@ func listSensitiveWord(wordChan chan *sensitiveWord, partSize int64) error {
 	for i := int64(0); i < queryCount; i++ {
 		wordPartArray, err := listSensitiveWordPart(start, partSize)
 		if err != nil {
+			zap.L().Error("敏感词查询数目错误", zap.Error(err))
 			return err
 		}
 		for i, word := range wordPartArray {
@@ -65,6 +67,7 @@ func insertSensitiveWord(row *sensitiveWord) error {
 
 	_, err := mysql.DB.Exec(sqlStr, row.Id, row.Content)
 	if err != nil {
+		zap.L().Error("敏感词新增错误", zap.Error(err))
 		return err
 	}
 	return nil

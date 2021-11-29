@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/signal"
 	"oss_storage/pkg/idgenerator"
-	"oss_storage/pkg/sensitiveword"
 	"oss_storage/route"
 	"oss_storage/setting"
 	"oss_storage/setting/logger"
@@ -87,12 +86,12 @@ func main() {
 	}
 
 	// 8、初始化Sensitiveword
-	fmt.Println("8、初始化Sensitiveword")
-	sensitiveword.Init()
-	if err != nil {
-		fmt.Printf("init Sensitiveword client failed, err:%v\n", err)
-		return
-	}
+	//fmt.Println("8、初始化Sensitiveword")
+	//sensitiveword.Init()
+	//if err != nil {
+	//	fmt.Printf("init Sensitiveword client failed, err:%v\n", err)
+	//	return
+	//}
 
 	// 启动服务(优雅关机)
 	fmt.Println("9、启动服务(优雅关机)")

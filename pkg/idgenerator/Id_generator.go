@@ -7,9 +7,10 @@ import (
 )
 
 const (
-	MODULE_DEFAULT = "default"
-	MODULE_TEMP    = "temp"
-	MODULE_TEST    = "test"
+	MODULE_DEFAULT   = "default"
+	MODULE_TEMP      = "temp"
+	MODULE_TEST      = "test"
+	MODULE_OSS_EVENT = "oss_event"
 )
 
 var moduleMap map[string]*idModule

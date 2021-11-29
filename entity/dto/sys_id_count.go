@@ -1,8 +1,8 @@
 package dto
 
-type SysIdCount struct {
-	Id      int64  `json:"id"`
-	Module  string `json:"module"`
-	Step    int64  `json:"step"`
-	Counter int64  `json:"counter"`
+type SysIdCountDTO struct {
+	SysIdCountId int64  `json:"sysIdCountId"`
+	Module       string `json:"module"`
+	Step         int64  `json:"step"`
+	Counter      int64  `json:"counter"`
 }
