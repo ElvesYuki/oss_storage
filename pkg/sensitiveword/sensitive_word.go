@@ -1,30 +1,60 @@
 package sensitiveword
 
 import (
-	"bufio"
 	"go.uber.org/zap"
-	"os"
+	"time"
 )
 
 var trieRoot *trieNode
 
 func Init() {
-	// 打开文件
-	file, err := os.OpenFile("./static/sensi_words.txt", os.O_RDONLY, 0600)
-	if err != nil {
-		zap.L().Error("打开敏感词文件出错", zap.Error(err))
-	}
-	defer file.Close()
-	scanner := bufio.NewScanner(file)
 
+	start := time.Now()
+	zap.L().Info("开始敏感词过滤器 ===>" + start.String())
+
+	partSize := int64(1 << 5)
+	wordChan := make(chan *sensitiveWord, partSize)
 	trieRoot = newTrieNode(' ')
-	// 扫描每一行
-	for scanner.Scan() {
-		// 构建根节点树
-		buildTree([]rune(scanner.Text()))
-	}
-	// 添加失败节点
-	addFailNode()
+
+	// 从数据库获取数据 送入chan
+	go func() {
+		err := listSensitiveWord(wordChan, partSize)
+		if err != nil {
+			zap.L().Error("数据库获取敏感词出错", zap.Error(err))
+		}
+	}()
+
+	// 从chan获取数据， 构造节点数
+	go func(wordChanIn chan *sensitiveWord) {
+		for word := range wordChanIn {
+			if word.Id == int64(-1) {
+				close(wordChanIn)
+				break
+			}
+			// 构建根节点树
+			buildTree([]rune(word.Content))
+		}
+		// 添加失败节点
+		addFailNode()
+		zap.L().Info("启动敏感词过滤器完成，耗时===>" + time.Since(start).String())
+	}(wordChan)
+
+	//// 打开文件
+	//file, err := os.OpenFile("./static/sensi_words.txt", os.O_RDONLY, 0600)
+	//if err != nil {
+	//	zap.L().Error("打开敏感词文件出错", zap.Error(err))
+	//}
+	//defer file.Close()
+	//scanner := bufio.NewScanner(file)
+	//
+	//trieRoot = newTrieNode(' ')
+	//// 扫描每一行
+	//for scanner.Scan() {
+	//	// 构建根节点树
+	//	buildTree([]rune(scanner.Text()))
+	//}
+	//// 添加失败节点
+	//addFailNode()
 }
 
 // SensitiveFilter 过滤敏感词

@@ -95,7 +95,7 @@ func main() {
 	}
 
 	// 启动服务(优雅关机)
-	fmt.Println("6、启动服务(优雅关机)")
+	fmt.Println("9、启动服务(优雅关机)")
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", setting.Conf.AppDetailConfig.Port),
 		Handler: r,

@@ -84,8 +84,8 @@ func addSysIdModule(module string) (*idModule, error) {
 	}
 
 	// 用channel更新
-	updateModuleMapChan <- sysIdModule
 	go updateSysIdModule()
+	updateModuleMapChan <- sysIdModule
 
 	return sysIdModule, err
 }
@@ -112,8 +112,8 @@ func updateSysIdModule() {
 	sysIdModule.counter = sysIdCount.Counter.Int64
 
 	// 用channel更新
-	updateModuleMapChan <- sysIdModule
 	go updateModuleMap()
+	updateModuleMapChan <- sysIdModule
 
 	// 更新数据库counter
 	if err := UpdateCounterSysIdCountById(sysIdModule.id, sysIdModule.counter+sysIdModule.step); err != nil {

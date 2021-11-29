@@ -96,7 +96,7 @@ func TestMinioHandler(c *gin.Context) {
 
 func TestSensitiveFilter(c *gin.Context) {
 	text := c.PostForm("text")
-	fmt.Println(text)
+	//fmt.Println(text)
 	textReturn := sensitiveword.SensitiveFilter(text)
 	httpresult.OK.NewBuilder().Data(textReturn).Build(c)
 }
