@@ -1,9 +1,9 @@
-package {packageName}
+package {{.PackageName}}
 
 import "database/sql"
 
-type {modelName} struct {
+type {{.ModelName}} struct {
 	Id          sql.NullInt64  `db:"id"`
-	{dbTableCol}
+	{{.TableCol}}
 }
 

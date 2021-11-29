@@ -11,7 +11,7 @@ import (
 // OssSingleUploadHandler Oss单个文件上传接口
 // @Summary Oss单个文件上传接口
 // @Description Oss单个文件上传接口
-// @Tags Oss上传相关接口
+// @Tags Oss文件上传接口
 // @Accept multipart/form-data
 // @Produce application/json
 // @Param file formData file true "对象文件"
@@ -41,7 +41,7 @@ func OssSingleUploadHandler(c *gin.Context) {
 // OssMultipleUploadHandler Oss多文件上传接口
 // @Summary Oss多文件上传接口
 // @Description Oss多文件上传接口
-// @Tags Oss上传相关接口
+// @Tags Oss文件上传接口
 // @Accept multipart/form-data
 // @Produce application/json
 // @Param files formData file true "对象文件数组"
@@ -78,7 +78,7 @@ func OssMultipleUploadHandler(c *gin.Context) {
 // OssTextUploadHandler Oss文本上传接口
 // @Summary Oss文本上传接口
 // @Description Oss文本上传接口
-// @Tags Oss上传相关接口
+// @Tags Oss文件上传接口
 // @Accept multipart/form-data
 // @Produce application/json
 // @Param text formData string true "文本内容"
@@ -100,16 +100,16 @@ func OssTextUploadHandler(c *gin.Context) {
 }
 
 // OssTextCoverHandler Oss覆盖文本上传接口
-// @Summary Oss文本上传接口
-// @Description Oss文本上传接口
-// @Tags Oss上传相关接口
+// @Summary Oss覆盖文本上传接口
+// @Description Oss覆盖文本上传接口
+// @Tags Oss文件上传接口
 // @Accept multipart/form-data
 // @Produce application/json
 // @Param text formData string true "文本内容"
 // @Param code formData string true "上传编码"
 // @Param url formData string true "覆盖的源路径"
 // @Success 200 {object} oss.BaseObject
-// @Router /v1/oss/text/upload [post]
+// @Router /v1/oss/text/cover [post]
 func OssTextCoverHandler(c *gin.Context) {
 
 	code := c.PostForm("code")

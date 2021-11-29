@@ -23,7 +23,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Oss相关接口"
+                    "Oss文件上传接口"
                 ],
                 "summary": "Oss多文件上传接口",
                 "parameters": [
@@ -62,7 +62,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Oss相关接口"
+                    "Oss文件上传接口"
                 ],
                 "summary": "Oss单个文件上传接口",
                 "parameters": [
@@ -70,6 +70,91 @@
                         "type": "file",
                         "description": "对象文件",
                         "name": "file",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "上传编码",
+                        "name": "code",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/oss.BaseObject"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/oss/text/cover": {
+            "post": {
+                "description": "Oss覆盖文本上传接口",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Oss文件上传接口"
+                ],
+                "summary": "Oss覆盖文本上传接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "文本内容",
+                        "name": "text",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "上传编码",
+                        "name": "code",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "覆盖的源路径",
+                        "name": "url",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/oss.BaseObject"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/oss/text/upload": {
+            "post": {
+                "description": "Oss文本上传接口",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Oss文件上传接口"
+                ],
+                "summary": "Oss文本上传接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "文本内容",
+                        "name": "text",
                         "in": "formData",
                         "required": true
                     },

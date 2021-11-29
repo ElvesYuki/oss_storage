@@ -82,7 +82,7 @@ paths:
             $ref: '#/definitions/httpresult.Response'
       summary: Oss多文件上传接口
       tags:
-      - Oss相关接口
+      - Oss文件上传接口
   /v1/oss/single/upload:
     post:
       consumes:
@@ -108,5 +108,62 @@ paths:
             $ref: '#/definitions/oss.BaseObject'
       summary: Oss单个文件上传接口
       tags:
-      - Oss相关接口
+      - Oss文件上传接口
+  /v1/oss/text/cover:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Oss覆盖文本上传接口
+      parameters:
+      - description: 文本内容
+        in: formData
+        name: text
+        required: true
+        type: string
+      - description: 上传编码
+        in: formData
+        name: code
+        required: true
+        type: string
+      - description: 覆盖的源路径
+        in: formData
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/oss.BaseObject'
+      summary: Oss覆盖文本上传接口
+      tags:
+      - Oss文件上传接口
+  /v1/oss/text/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Oss文本上传接口
+      parameters:
+      - description: 文本内容
+        in: formData
+        name: text
+        required: true
+        type: string
+      - description: 上传编码
+        in: formData
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/oss.BaseObject'
+      summary: Oss文本上传接口
+      tags:
+      - Oss文件上传接口
 swagger: "2.0"
