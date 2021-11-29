@@ -1,7 +1,4 @@
-package common
-
-type tableCol struct {
-}
+package dbgennerator
 
 func GenerateDbModel(dbName string) {
 	//tmpl, err := template.ParseFiles("./common/template/db/template_mode.tmpl")
