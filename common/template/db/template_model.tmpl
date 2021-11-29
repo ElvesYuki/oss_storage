@@ -1,0 +1,9 @@
+package {packageName}
+
+import "database/sql"
+
+type {modelName} struct {
+	Id          sql.NullInt64  `db:"id"`
+	{dbTableCol}
+}
+
