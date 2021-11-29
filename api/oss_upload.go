@@ -1,12 +1,11 @@
 package api
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"oss_storage/common/httperror"
 	"oss_storage/common/httpresult"
-	"oss_storage/pkg/oss"
+	"oss_storage/service"
 )
 
 // OssSingleUploadHandler Oss单个文件上传接口
@@ -30,13 +29,13 @@ func OssSingleUploadHandler(c *gin.Context) {
 	code := c.PostForm("code")
 
 	// 文件上传
-	object, err := oss.UploadObjectUtil(code, file)
+	object, err := service.OssSingleUploadService(code, file)
 	if err != nil {
 		httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
 		return
 	}
-	fmt.Println(object)
 	httpresult.OK.NewBuilder().Data(object).Build(c)
+	return
 }
 
 // OssMultipleUploadHandler Oss多文件上传接口
@@ -66,18 +65,12 @@ func OssMultipleUploadHandler(c *gin.Context) {
 	}
 	code := c.PostForm("code")
 
-	objects := make([]interface{}, len(files))
-
-	for i, file := range files {
-		// 文件上传
-		object, err := oss.UploadObjectUtil(code, file)
-		if err != nil {
-			httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
-			return
-		}
-		objects[i] = object
+	// 文件上传
+	objects, err := service.OssMultipleUploadService(code, files)
+	if err != nil {
+		httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
+		return
 	}
-
 	httpresult.OK.NewBuilder().Data(objects).Build(c)
 	return
 }
@@ -98,11 +91,10 @@ func OssTextUploadHandler(c *gin.Context) {
 	code := c.PostForm("code")
 
 	// 文本上传
-	object, err := oss.UploadObjectUtil(code, text)
+	object, err := service.OssTextUploadService(code, text)
 	if err != nil {
 		httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
 		return
 	}
-	fmt.Println(object)
 	httpresult.OK.NewBuilder().Data(object).Build(c)
 }
