@@ -25,7 +25,7 @@ func listSensitiveWord(wordChan chan *sensitiveWord, partSize int64) error {
 	// 分批次查询
 	// 每次查询大小
 	queryCount := int64(math.Ceil(float64(count/partSize)) + 1)
-	start := int64(1)
+	start := int64(0)
 	for i := int64(0); i < queryCount; i++ {
 		wordPartArray, err := listSensitiveWordPart(start, partSize)
 		if err != nil {
