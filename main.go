@@ -86,7 +86,13 @@ func main() {
 		return
 	}
 
+	// 8、初始化Sensitiveword
+	fmt.Println("8、初始化Sensitiveword")
 	sensitiveword.Init()
+	if err != nil {
+		fmt.Printf("init Sensitiveword client failed, err:%v\n", err)
+		return
+	}
 
 	// 启动服务(优雅关机)
 	fmt.Println("6、启动服务(优雅关机)")

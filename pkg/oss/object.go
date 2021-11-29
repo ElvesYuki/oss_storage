@@ -15,21 +15,21 @@ type BaseObject struct {
 // ImgObject 图像对象
 type ImgObject struct {
 	BaseObject
-	Width     int64       `json:"width"`     // 图片宽度
-	Height    int64       `json:"height"`    // 图片高度
-	Thumbnail []ImgObject `json:"thumbnail"` // 缩略图数组
+	Width     int64      `json:"width"`     // 图片宽度
+	Height    int64      `json:"height"`    // 图片高度
+	Thumbnail *ImgObject `json:"thumbnail"` // 缩略图
 }
 
 // VideoObject 视频对象
 type VideoObject struct {
 	BaseObject
-	Width     int64     `json:"width"`     // 视频宽度
-	Height    int64     `json:"height"`    // 视频高度
-	Duration  int64     `json:"duration"`  // 视频时长  单位：毫秒
-	BitRate   int64     `json:"bitRate"`   // 视频比特率 比特率，单位：Kb/s  指视频每秒传送（包含）的比特数
-	Encoder   string    `json:"encoder"`   // 编码器
-	FrameRate int64     `json:"frameRate"` // 帧率，单位：FPS（Frame Per Second） 指视频每秒包含的帧数
-	Thumbnail ImgObject `json:"thumbnail"` // 视频封面
+	Width     int64      `json:"width"`     // 视频宽度
+	Height    int64      `json:"height"`    // 视频高度
+	Duration  int64      `json:"duration"`  // 视频时长  单位：毫秒
+	BitRate   int64      `json:"bitRate"`   // 视频比特率 比特率，单位：Kb/s  指视频每秒传送（包含）的比特数
+	Encoder   string     `json:"encoder"`   // 编码器
+	FrameRate int64      `json:"frameRate"` // 帧率，单位：FPS（Frame Per Second） 指视频每秒包含的帧数
+	Thumbnail *ImgObject `json:"thumbnail"` // 视频封面
 }
 
 // AudioObject 音频对象

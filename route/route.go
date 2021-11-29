@@ -25,12 +25,12 @@ func SetUp() *gin.Engine {
 		v1.POST("/oss/multiple/upload", api.OssMultipleUploadHandler)
 		v1.POST("/oss/text/upload", api.OssTextUploadHandler)
 
-		v1.GET("/test", api.Test)
 		v1.GET("/test/idGenerate", api.ListIdGenerateHandler)
 		v1.GET("/test/idGenerate/:id", api.GetIdGenerateByIdHandler)
 		v1.GET("/test/get/id", api.GetIdHandler)
 		v1.POST("/test/minio", api.TestMinio)
 		v1.POST("/test/minio/handler", api.TestMinioHandler)
+		v1.POST("/test/sensitive/handler", api.TestSensitiveFilter)
 	}
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

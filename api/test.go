@@ -8,15 +8,10 @@ import (
 	"net/http"
 	"oss_storage/common/httpresult"
 	"oss_storage/pkg/oss"
+	"oss_storage/pkg/sensitiveword"
 	"oss_storage/service"
 	"strconv"
 )
-
-func Test(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"msg": "test",
-	})
-}
 
 func ListIdGenerateHandler(c *gin.Context) {
 
@@ -97,4 +92,11 @@ func TestMinioHandler(c *gin.Context) {
 	fmt.Println(object)
 	httpresult.OK.NewBuilder().Data(object).Build(c)
 
+}
+
+func TestSensitiveFilter(c *gin.Context) {
+	text := c.PostForm("text")
+	fmt.Println(text)
+	textReturn := sensitiveword.SensitiveFilter(text)
+	httpresult.OK.NewBuilder().Data(textReturn).Build(c)
 }
