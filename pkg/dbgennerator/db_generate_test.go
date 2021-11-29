@@ -28,13 +28,14 @@ func TestListTableColByTsANDTn(t *testing.T) {
 	for _, tableCol := range tableColArray {
 		fmt.Println(*tableCol)
 		s := Case2Camel(tableCol.ColumnName.String)
-		fmt.Println(Ucfirst(s))
+		fmt.Println(UcFirst(s))
 	}
 	Close()
 }
 
 func TestGenerateDbModel(t *testing.T) {
 	Init()
+	filedTypeMapInit()
 	GenerateDbModel("oss_event")
 	Close()
 }

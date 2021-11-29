@@ -18,7 +18,7 @@ type TableCol struct {
 func ListTableColByTsANDTn(tableSchema string, tableName string) (data []*TableCol, err error) {
 	// oss_storage
 	sqlStr := `select table_schema, table_name, column_name, ordinal_position, data_type, character_maximum_length, column_comment
-       from information_schema.COLUMNS where TABLE_SCHEMA = ? and TABLE_NAME = ?`
+       from information_schema.COLUMNS where TABLE_SCHEMA = ? and TABLE_NAME = ? order by ordinal_position asc`
 
 	err = mysql.DB.Select(&data, sqlStr, tableSchema, tableName)
 	if err != nil {
