@@ -56,3 +56,20 @@ func OssTextUploadService(code string, text string) (interface{}, error) {
 	}
 	return object, nil
 }
+
+// OssTextCoverService Oss文本覆盖上传接口
+// @Author luohuan
+// @Description Oss文本上传接口
+// @Param text formData string true "文本内容"
+// @Param code formData string true "上传编码"
+// @Param url formData string true "覆盖的源路径"
+// @Return
+func OssTextCoverService(code string, url string, text string) (interface{}, error) {
+
+	// 文本上传
+	object, err := oss.CoverObjectUtil(code, url, text)
+	if err != nil {
+		return nil, err
+	}
+	return object, nil
+}

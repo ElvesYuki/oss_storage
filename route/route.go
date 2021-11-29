@@ -24,6 +24,7 @@ func SetUp() *gin.Engine {
 		v1.POST("/oss/single/upload", api.OssSingleUploadHandler)
 		v1.POST("/oss/multiple/upload", api.OssMultipleUploadHandler)
 		v1.POST("/oss/text/upload", api.OssTextUploadHandler)
+		v1.POST("/oss/text/cover", api.OssTextCoverHandler)
 
 		v1.GET("/test/idGenerate", api.ListIdGenerateHandler)
 		v1.GET("/test/idGenerate/:id", api.GetIdGenerateByIdHandler)

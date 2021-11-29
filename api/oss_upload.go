@@ -20,13 +20,13 @@ import (
 // @Router /v1/oss/single/upload [post]
 func OssSingleUploadHandler(c *gin.Context) {
 
+	code := c.PostForm("code")
 	file, err := c.FormFile("file")
 	if err != nil {
 		err := new(httperror.XmoError).WithBiz(httperror.BIZ_ARG_ERROR)
 		httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
 		return
 	}
-	code := c.PostForm("code")
 
 	// 文件上传
 	object, err := service.OssSingleUploadService(code, file)
@@ -50,6 +50,7 @@ func OssSingleUploadHandler(c *gin.Context) {
 // @Router /v1/oss/multiple/upload [post]
 func OssMultipleUploadHandler(c *gin.Context) {
 
+	code := c.PostForm("code")
 	form, err := c.MultipartForm()
 	if err != nil {
 		zap.L().Error("上传文件异常", zap.Error(err))
@@ -63,7 +64,6 @@ func OssMultipleUploadHandler(c *gin.Context) {
 		httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
 		return
 	}
-	code := c.PostForm("code")
 
 	// 文件上传
 	objects, err := service.OssMultipleUploadService(code, files)
@@ -87,11 +87,37 @@ func OssMultipleUploadHandler(c *gin.Context) {
 // @Router /v1/oss/text/upload [post]
 func OssTextUploadHandler(c *gin.Context) {
 
-	text := c.PostForm("text")
 	code := c.PostForm("code")
+	text := c.PostForm("text")
 
 	// 文本上传
 	object, err := service.OssTextUploadService(code, text)
+	if err != nil {
+		httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
+		return
+	}
+	httpresult.OK.NewBuilder().Data(object).Build(c)
+}
+
+// OssTextCoverHandler Oss覆盖文本上传接口
+// @Summary Oss文本上传接口
+// @Description Oss文本上传接口
+// @Tags Oss上传相关接口
+// @Accept multipart/form-data
+// @Produce application/json
+// @Param text formData string true "文本内容"
+// @Param code formData string true "上传编码"
+// @Param url formData string true "覆盖的源路径"
+// @Success 200 {object} oss.BaseObject
+// @Router /v1/oss/text/upload [post]
+func OssTextCoverHandler(c *gin.Context) {
+
+	code := c.PostForm("code")
+	url := c.PostForm("url")
+	text := c.PostForm("text")
+
+	// 文本上传
+	object, err := service.OssTextCoverService(code, url, text)
 	if err != nil {
 		httpresult.ErrReturn.NewBuilder().Error(err).Build(c)
 		return
