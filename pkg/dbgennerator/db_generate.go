@@ -36,12 +36,19 @@ func GenerateDbModel(tableName string) {
 	var tableColModelArray []*tableColModel
 
 	for _, col := range tableColArray {
-		tableColModelArray = append(tableColModelArray, &tableColModel{
+
+		tableColModelStruct := &tableColModel{
 			OrdinalPosition: col.OrdinalPosition.Int16,
 			FiledName:       UcFirst(Case2Camel(col.ColumnName.String)),
 			FiledType:       filedTypeMap[col.DataType.String],
 			FiledTag:        "`db:\"" + col.ColumnName.String + "\"`",
-		})
+		}
+
+		if col.ColumnComment.Valid {
+			tableColModelStruct.ColumnComment = "// " + col.ColumnComment.String
+		}
+
+		tableColModelArray = append(tableColModelArray, tableColModelStruct)
 	}
 
 	// 对齐

@@ -4,7 +4,7 @@ import "database/sql"
 
 type {{.ModelName}} struct {
     {{ $colLength := len .TableCol -}}
-    {{ range $col :=  .TableCol }}{{ $col.FiledName }} {{ $col.FiledType }} {{ $col.FiledTag }}{{if ne $colLength $col.OrdinalPosition }}
+    {{ range $col :=  .TableCol }}{{ $col.FiledName }} {{ $col.FiledType }} {{ $col.FiledTag }} {{ $col.ColumnComment }} {{if ne $colLength $col.OrdinalPosition }}
 	{{ end }}{{ end }}
 }
 

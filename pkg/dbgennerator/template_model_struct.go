@@ -11,6 +11,7 @@ type tableColModel struct {
 	FiledName       string `json:"filedName"`       // 属性名
 	FiledType       string `json:"filedType"`       // 类型名
 	FiledTag        string `json:"filedTag"`        // 属性标签
+	ColumnComment   string `json:"columnComment"`   // 属性备注
 }
 
 var filedTypeMap map[string]string
