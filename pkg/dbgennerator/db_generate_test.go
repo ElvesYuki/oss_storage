@@ -9,17 +9,17 @@ import (
 	"testing"
 )
 
-func Init() {
+func InitTest() {
 	viper.AddConfigPath("../../")
 	test.InitTest()
 }
-func Close() {
+func CloseTest() {
 	defer mysql.Close()
 	defer redis.Close()
 }
 
 func TestListTableColByTsANDTn(t *testing.T) {
-	Init()
+	InitTest()
 	tableColArray, err := ListTableColByTsANDTn("oss_storage", "oss_event")
 	if err != nil {
 		fmt.Println(err)
@@ -30,12 +30,12 @@ func TestListTableColByTsANDTn(t *testing.T) {
 		s := Case2Camel(tableCol.ColumnName.String)
 		fmt.Println(UcFirst(s))
 	}
-	Close()
+	CloseTest()
 }
 
-func TestGenerateDbModel(t *testing.T) {
+func TestGenerateTableMap(t *testing.T) {
+	InitTest()
 	Init()
-	filedTypeMapInit()
-	GenerateDbModel("oss_event")
-	Close()
+	GenerateTableMap("oss_storage", "oss_event", "model")
+	CloseTest()
 }

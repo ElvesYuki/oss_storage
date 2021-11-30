@@ -1,0 +1,10 @@
+package {{ .PackageName }}
+
+import "database/sql"
+
+type {{ .TypeName }} struct {
+    {{ $colLength := len .TableColFieldArr -}}
+    {{ range $col :=  .TableColFieldArr }}{{ $col.FiledName }} {{ $col.FiledType }} {{ $col.FiledTag }} {{ $col.ColumnComment }} {{if ne $colLength $col.OrdinalPosition }}
+	{{ end }}{{ end }}
+}
+

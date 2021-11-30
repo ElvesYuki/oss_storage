@@ -1,4 +1,4 @@
-package dbgennerator
+package dto
 
 type templateModel struct {
 	PackageName string           `json:"packageName"`
@@ -12,12 +12,4 @@ type tableColModel struct {
 	FiledType       string `json:"filedType"`       // 类型名
 	FiledTag        string `json:"filedTag"`        // 属性标签
 	ColumnComment   string `json:"columnComment"`   // 属性备注
-}
-
-var filedTypeMap map[string]string
-
-func filedTypeMapInit() {
-	filedTypeMap = make(map[string]string)
-	filedTypeMap["bigint"] = "sql.NullInt64"
-	filedTypeMap["varchar"] = "sql.NullString"
 }

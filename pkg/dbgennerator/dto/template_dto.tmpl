@@ -1,0 +1,31 @@
+package {{ .TableFileDTO.PackageName }}
+
+import (
+	"oss_storage/entity/model"
+)
+
+type {{ .TableFileDTO.TypeName }} struct {
+    {{ $colLength := len .TableFileDTO.TableColFieldArr -}}
+    {{ range $col :=  .TableFileDTO.TableColFieldArr }}{{ $col.FiledName }} {{ $col.FiledTypeFinally }} {{ $col.FiledTag }} {{ $col.ColumnComment }} {{if ne $colLength $col.OrdinalPosition }}
+	{{ end }}{{ end }}
+}
+
+
+// To{{- .TableFileDTO.TypeName }} description
+func To{{- .TableFileDTO.TypeName -}}(src *{{ .TableFileDB.PackageName }}.{{ .TableFileDB.TypeName }}) *{{ .TableFileDTO.TypeName }} {
+    {{ $colDTOLength := len .TableFileDTO.TableColFieldWithColonArr -}}
+    return &{{ .TableFileDTO.TypeName }}{
+        {{ range $colDTOIndex, $colDTO := .TableFileDTO.TableColFieldWithColonArr }}{{ $colDTO.FiledName }}{{ $TableColFileByIndex := index $.TableFileDB.TableColFieldNotAlignArr $colDTOIndex }}src.{{ $TableColFileByIndex.FiledName }}.{{ $TableColFileByIndex.FiledType.GoTypeUcFirst }},{{if ne $colDTOLength $colDTO.OrdinalPosition }}
+    	{{ end }}{{ end }}
+    }
+}
+
+// To{{- .TableFileDB.TypeName }} description
+func To{{- .TableFileDB.TypeName -}}(src *{{ .TableFileDTO.TypeName }}) *{{ .TableFileDB.PackageName }}.{{ .TableFileDB.TypeName }} {
+    {{ $colLength := len .TableFileDB.TableColFieldWithColonArr -}}
+    return &{{ .TableFileDB.PackageName }}.{{ .TableFileDB.TypeName }}{
+        {{ range $colIndex, $col := .TableFileDB.TableColFieldWithColonArr }}{{ $col.FiledName }}{{ $TableColFileByIndex := index $.TableFileDTO.TableColFieldNotAlignArr $colIndex }}{{ $TableColFileByIndex.FiledType.SetSqlTypeNullFunc }}(src.{{ $TableColFileByIndex.FiledName }}),{{if ne $colLength $col.OrdinalPosition }}
+    	{{ end }}{{ end }}
+    }
+}
+
