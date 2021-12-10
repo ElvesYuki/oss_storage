@@ -16,7 +16,7 @@ type uploadOperator struct{}
 func (uo *uploadOperator) putObject(object *uploadObject) {
 	uploadInfo, err := OC.GetClient().MinioClient.PutObject(context.Background(),
 		object.bucketName, object.objectName,
-		object.ossReader, -1,
+		object.ossReader, object.size,
 		minio.PutObjectOptions{
 			ContentType: object.contentType,
 		})

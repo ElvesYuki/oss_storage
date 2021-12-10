@@ -1,6 +1,7 @@
 package route
 
 import (
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -34,6 +35,8 @@ func SetUp() *gin.Engine {
 		v1.POST("/test/sensitive/handler", api.TestSensitiveFilter)
 	}
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	pprof.Register(r)
 
 	return r
 }

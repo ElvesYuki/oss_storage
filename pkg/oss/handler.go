@@ -14,17 +14,18 @@ var ossStoragePathDTOMap map[string]*dto.OssStoragePathDTO
 
 // UploadObject 封装的上传对象
 type uploadObject struct {
-	cover       bool
-	ossType     string
-	ossContent  interface{}
-	ossReader   io.Reader
-	ossName     string
-	format      string
-	contentType string
-	size        int64
-	bucketName  string
-	objectName  string
-	versionId   string
+	cover         bool
+	ossType       string
+	ossContent    interface{}
+	ossReader     io.Reader
+	ossReaderSize int64
+	ossName       string
+	format        string
+	contentType   string
+	size          int64
+	bucketName    string
+	objectName    string
+	versionId     string
 }
 
 // uploadObjectHandler 上传处理器
@@ -122,15 +123,17 @@ func uploadString(path *dto.OssStoragePathDTO, oType *objectTypeItem, object str
 		return nil, new(httperror.XmoError).WithBiz(httperror.BIZ_ARG_ERROR)
 	}
 
+	stringReader := strings.NewReader(object)
+
 	uploadObject := &uploadObject{
 		cover:       false,
 		ossType:     oType.ObjectType,
 		ossContent:  object,
-		ossReader:   strings.NewReader(object),
+		ossReader:   stringReader,
 		ossName:     ossName,
 		format:      GetFileSuffix(ossName),
 		contentType: oType.ContentType,
-		size:        int64(len(object)),
+		size:        stringReader.Size(),
 	}
 
 	// 计算MD5 存入日志
