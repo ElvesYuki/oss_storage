@@ -4,6 +4,7 @@ import (
 	"go.uber.org/zap"
 	"io"
 	"mime/multipart"
+	"oss_storage/common"
 	"oss_storage/common/httperror"
 	"oss_storage/entity/dto"
 	"strings"
@@ -87,7 +88,10 @@ func uploadMultipartFile(path *dto.OssStoragePathDTO, oType *objectTypeItem, obj
 	// 计算MD5 存入日志
 	packOssEventChan := make(chan *dto.OssEventDTO)
 	defer close(packOssEventChan)
-	go PackMultipartOssEventChan(uploadObject, object, packOssEventChan)
+	go func() {
+		defer common.ManualRecover()
+		PackMultipartOssEventChan(uploadObject, object, packOssEventChan)
+	}()
 
 	// 调度器 分配 对象工厂
 	uploadFactory, err := uploadObjectDispatcher(oType)
@@ -132,7 +136,10 @@ func uploadString(path *dto.OssStoragePathDTO, oType *objectTypeItem, object str
 	// 计算MD5 存入日志
 	packOssEventChan := make(chan *dto.OssEventDTO)
 	defer close(packOssEventChan)
-	go PackStringOssEventChan(uploadObject, object, packOssEventChan)
+	go func() {
+		defer common.ManualRecover()
+		PackStringOssEventChan(uploadObject, object, packOssEventChan)
+	}()
 
 	// 调度器 分配 对象工厂
 	uploadFactory, err := uploadObjectDispatcher(oType)
@@ -221,7 +228,10 @@ func coverMultipartFile(path *dto.OssStoragePathDTO, oType *objectTypeItem, url 
 	// 计算MD5 存入日志
 	packOssEventChan := make(chan *dto.OssEventDTO)
 	defer close(packOssEventChan)
-	go PackMultipartOssEventChan(uploadObject, object, packOssEventChan)
+	go func() {
+		defer common.ManualRecover()
+		PackMultipartOssEventChan(uploadObject, object, packOssEventChan)
+	}()
 
 	// 调度器 分配 对象工厂
 	uploadFactory, err := uploadObjectDispatcher(oType)
@@ -270,7 +280,10 @@ func coverString(path *dto.OssStoragePathDTO, oType *objectTypeItem, url string,
 	// 计算MD5 存入日志
 	packOssEventChan := make(chan *dto.OssEventDTO)
 	defer close(packOssEventChan)
-	go PackStringOssEventChan(uploadObject, object, packOssEventChan)
+	go func() {
+		defer common.ManualRecover()
+		PackStringOssEventChan(uploadObject, object, packOssEventChan)
+	}()
 
 	// 调度器 分配 对象工厂
 	uploadFactory, err := uploadObjectDispatcher(oType)

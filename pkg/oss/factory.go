@@ -18,11 +18,13 @@ func (uf *uploadFactory) getFacType() string {
 
 func (uf *uploadFactory) getOssObject(path *dto.OssStoragePathDTO, oType *objectTypeItem, object *uploadObject) (interface{}, error) {
 
-	// 检验格式是否正确
-	_, hasFormat := path.ObjectSuffix[object.format]
-	if !hasFormat {
-		err := new(httperror.XmoError).WithBiz(httperror.BIZ_ILLEGAL_FILE_TYPE_ERROR)
-		return nil, err
+	if len(path.ObjectSuffix) != 0 {
+		// 检验格式是否正确
+		_, hasFormat := path.ObjectSuffix[object.format]
+		if !hasFormat {
+			err := new(httperror.XmoError).WithBiz(httperror.BIZ_ILLEGAL_FILE_TYPE_ERROR)
+			return nil, err
+		}
 	}
 
 	// 校验文件大小
