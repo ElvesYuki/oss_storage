@@ -10,30 +10,7 @@ import (
 	"oss_storage/common/httpresult"
 	"runtime/debug"
 	"strings"
-	"time"
 )
-
-// GinLogger 接收gin框架默认的日志
-func GinLogger() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		start := time.Now()
-		path := c.Request.URL.Path
-		query := c.Request.URL.RawQuery
-		c.Next()
-
-		cost := time.Since(start)
-		zap.L().Info(path,
-			zap.Int("status", c.Writer.Status()),
-			zap.String("method", c.Request.Method),
-			zap.String("path", path),
-			zap.String("query", query),
-			zap.String("ip", c.ClientIP()),
-			zap.String("user-agent", c.Request.UserAgent()),
-			zap.String("errors", c.Errors.ByType(gin.ErrorTypePrivate).String()),
-			zap.Duration("cost", cost),
-		)
-	}
-}
 
 // GinRecovery recover掉项目可能出现的panic，并使用zap记录相关日志
 func GinRecovery(stack bool) gin.HandlerFunc {
@@ -78,6 +55,7 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 				//c.AbortWithStatus(http.StatusInternalServerError)
 				errReturn := new(httperror.XmoError).WithBiz(httperror.BIZ_DEFAULT_ERROR)
 				httpresult.ErrReturn.NewBuilder().Error(errReturn).Build(c)
+				return
 			}
 		}()
 		c.Next()
